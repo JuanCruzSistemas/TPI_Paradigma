@@ -1,4 +1,4 @@
-package ProyectoTPI.recursos;
+package ProyectoTPI.recursos.Archivos;
 
 import javax.swing.JOptionPane;
 

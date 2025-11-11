@@ -1,8 +1,6 @@
-package ProyectoTPI.recursos;
+package ProyectoTPI.recursos.Archivos;
 
 import java.util.List;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import java.io.File;
@@ -47,7 +45,11 @@ public class FileManager {
     public void agregarInformacion(boolean append, Object... informacion) {
         if (!existe()) crearArchivo();
 
-        try (PrintWriter salida = new PrintWriter(archivo))
+        try (PrintWriter salida = new PrintWriter(archivo)) {
+            Stream.of(informacion).forEach(salida::println);
+        } catch (IOException e) {
+            MensajesArchivos.errorEscrituraArchivo();
+        }
     }
 
     public void agregarInformacion(boolean append, List<?> informacion) {
