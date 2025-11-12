@@ -1,8 +1,8 @@
-package ProyectoTPI.interfaz;
+package ProyectoTPI.presentacion;
 
 import ProyectoTPI.gestores.GestorCuenta;
 import ProyectoTPI.dominio.Cuenta;
-import ProyectoTPI.dominio.RolPersonaUTN;
+//import ProyectoTPI.dominio.RolPersonaUTN;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +27,7 @@ public class Principal extends JFrame {
         btnRegistrarVehiculo.setFont(new Font("SansSerif", Font.BOLD, 18));
         btnConsultar.setFont(new Font("SansSerif", Font.BOLD, 18));
 
-        btnRegistrarCuenta.addActionListener(e -> registrarCuentaDemo());
+        //btnRegistrarCuenta.addActionListener(e -> registrarCuentaDemo());
         btnRegistrarVehiculo.addActionListener(e -> JOptionPane.showMessageDialog(this, "Formulario de registro de vehículo."));
         btnConsultar.addActionListener(e -> consultarCuentas());
 
@@ -41,10 +41,10 @@ public class Principal extends JFrame {
         setVisible(true);
     }
 
-    private void registrarCuentaDemo() {
-        gestor.agregarCuenta(new CuentaDemo(new RolPersonaUTN("Empleado UTN", 0.1)));
-        JOptionPane.showMessageDialog(this, "Cuenta registrada exitosamente.");
-    }
+    // private void registrarCuentaDemo() {
+    //     gestor.agregarCuenta(new CuentaDemo(new RolPersonaUTN("Empleado UTN", 0.1)));
+    //     JOptionPane.showMessageDialog(this, "Cuenta registrada exitosamente.");
+    // }
 
     private void consultarCuentas() {
         if (!gestor.tieneCuentas()) {
@@ -52,17 +52,17 @@ public class Principal extends JFrame {
         } else {
             StringBuilder sb = new StringBuilder("Cuentas registradas:\n");
             for (Cuenta c : gestor.getCuentas()) {
-                sb.append("- ").append(c.getRolPersonaUtn().getNombreRol())
-                  .append(" | Estado: ").append(c.getEstadoCuenta().getValorEstadoCuenta())
+                sb.append("- ").append(c.getRolPersonaUTN().getNombreRol())
+                  .append(" | Estado: ").append(c.getEstadoCuenta())
                   .append("\n");
             }
             JOptionPane.showMessageDialog(this, sb.toString());
         }
     }
 
-    private static class CuentaDemo extends Cuenta {
-        public CuentaDemo(RolPersonaUTN rol) {
-            super(rol);
-        }
-    }
+    // private static class CuentaDemo extends Cuenta {
+    //     public CuentaDemo(RolPersonaUTN rol) {
+    //         super(rol);
+    //     }
+    // }
 }

@@ -1,4 +1,4 @@
-package ProyectoTPI.recursos.Archivos;
+package ProyectoTPI.datos;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import javax.swing.JOptionPane;
+
+import ProyectoTPI.recursos.MensajesArchivos;
 
 public class FileManager {
     private String rutaArchivo;

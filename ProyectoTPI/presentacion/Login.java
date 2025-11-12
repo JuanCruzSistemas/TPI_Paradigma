@@ -1,19 +1,24 @@
-package ProyectoTPI.interfaz;
+package ProyectoTPI.presentacion;
 
-import ProyectoTPI.dominio.Empleado;
-import javax.swing.*;
-import java.util.ArrayList;
+import ProyectoTPI.dominio.Usuario;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import java.util.List;
 
 public class Login extends JFrame {
     private JTextField txtLegajo;
     private JPasswordField txtClave;
     private JButton btnIngresar;
-    private ArrayList<Empleado> empleados;
+    private List<Usuario> usuarios;
 
-    public Login(ArrayList<Empleado> empleados) {
-        this.empleados = empleados;
+    public Login(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
 
-        setTitle("Login Empleado");
+        setTitle("Login Usuario");
         setSize(400, 250);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -49,12 +54,12 @@ public class Login extends JFrame {
         String legajo = txtLegajo.getText().trim();
         String clave = new String(txtClave.getPassword());
 
-        for (Empleado e : empleados) {
+        for (Usuario e : usuarios) {
             if (e.getLegajo().equalsIgnoreCase(legajo) && e.validarClave(clave)) {
                 JOptionPane.showMessageDialog(this, "Bienvenido, " + e.getNombreCompleto());
                 dispose();
                 if (legajo.equalsIgnoreCase("admin")) {
-                    new VentanaAdmin(this.empleados);
+                    new VentanaAdmin(this.usuarios);
                 } else {
                     new Principal();
                 }

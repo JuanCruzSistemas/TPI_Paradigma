@@ -1,18 +1,22 @@
-package ProyectoTPI.interfaz;
+package ProyectoTPI.presentacion;
 
-import ProyectoTPI.dominio.Empleado;
+import ProyectoTPI.dominio.Usuario;
 import ProyectoTPI.recursos.Rutas;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class VentanaAdmin extends JFrame {
-    private ArrayList<Empleado> empleados;
+    private List<Usuario> usuarios;
 
-    public VentanaAdmin(ArrayList<Empleado> empleados) {
-        this.empleados = empleados;
+    public VentanaAdmin(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
 
         setTitle("Panel del Administrador");
         setSize(400, 250);
@@ -24,16 +28,16 @@ public class VentanaAdmin extends JFrame {
         lblTitulo.setBounds(110, 20, 200, 25);
         add(lblTitulo);
 
-        JButton btnAgregar = new JButton("Añadir Empleado");
+        JButton btnAgregar = new JButton("Añadir Usuario");
         btnAgregar.setBounds(120, 80, 150, 40);
         add(btnAgregar);
 
-        btnAgregar.addActionListener(e -> agregarEmpleado());
+        btnAgregar.addActionListener(e -> agregarUsuario());
 
         setVisible(true);
     }
 
-    private void agregarEmpleado() {
+    private void agregarUsuario() {
         String legajo = JOptionPane.showInputDialog("Legajo:");
         String nombre = JOptionPane.showInputDialog("Nombre:");
         String apellido = JOptionPane.showInputDialog("Apellido:");
@@ -45,20 +49,20 @@ public class VentanaAdmin extends JFrame {
             return;
         }
 
-        Empleado nuevo = new Empleado(legajo.trim(), nombre.trim(), apellido.trim(), contrasena.trim());
-        empleados.add(nuevo);
+        Usuario nuevo = new Usuario(legajo.trim(), nombre.trim(), apellido.trim(), contrasena.trim());
+        usuarios.add(nuevo);
 
-        guardarEmpleadoArchivo(nuevo);
-        JOptionPane.showMessageDialog(this, "Empleado añadido y guardado correctamente.");
+        guardarUsuarioArchivo(nuevo);
+        JOptionPane.showMessageDialog(this, "Usuario añadido y guardado correctamente.");
     }
 
-    private void guardarEmpleadoArchivo(Empleado empleado) {
-        try (FileWriter fw = new FileWriter(Rutas.RUTA_EMPLEADOS, true)) {
+    private void guardarUsuarioArchivo(Usuario usuario) {
+        try (FileWriter fw = new FileWriter(Rutas.RUTA_USUARIOS, true)) {
             fw.write(
-                empleado.getLegajo() + " | " +
-                empleado.getNombreCompleto().split(" ")[0] + " | " +
-                empleado.getNombreCompleto().split(" ")[1] + " | " +
-                empleado.getHashClave() + "\n"
+                usuario.getLegajo() + " | " +
+                usuario.getNombreCompleto().split(" ")[0] + " | " +
+                usuario.getNombreCompleto().split(" ")[1] + " | " +
+                usuario.getHashClave() + "\n"
             );
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al guardar en el archivo: " + e.getMessage());

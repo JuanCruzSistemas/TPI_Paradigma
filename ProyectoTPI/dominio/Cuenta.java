@@ -1,8 +1,6 @@
 package ProyectoTPI.dominio;
 
-import ProyectoTPI.gestores.GestorCuenta;
 import ProyectoTPI.recursos.MensajesDominio;
-import ProyectoTPI.recursos.EstadoCuentaa;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +15,7 @@ public class Cuenta {
     private String nroDocumento;
     private LocalDateTime fechaYHoraCreacion;
     private LocalDateTime fechaYHoraBaja;
-    private EstadoCuentaa estadoCuenta;
+    private EstadoCuenta estadoCuenta;
     private RolPersonaUTN rolPersonaUtn;
     private ArrayList<Vehiculo> vehiculos;
     private double saldo;
@@ -27,7 +25,7 @@ public class Cuenta {
         this.apellido = apellido;
         this.legajo = legajo;
         this.fechaYHoraCreacion = LocalDateTime.now();
-        this.estadoCuenta = EstadoCuentaa.ACTIVA;
+        this.estadoCuenta = EstadoCuenta.ACTIVA;
         this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
         this.vehiculos = new ArrayList<>();
@@ -60,7 +58,7 @@ public class Cuenta {
         }
     }
     
-    public EstadoCuentaa getEstadoCuenta() {
+    public EstadoCuenta getEstadoCuenta() {
         return this.estadoCuenta;
     }
     
@@ -128,17 +126,17 @@ public class Cuenta {
         if (estaInactiva()) {
             System.out.println(MensajesDominio.CUENTA_YA_DADA_BAJA + " Fecha de baja: " + this.fechaYHoraBaja);
         } else {
-            this.estadoCuenta = EstadoCuentaa.INACTIVA;
+            this.estadoCuenta = EstadoCuenta.INACTIVA;
             this.fechaYHoraBaja = LocalDateTime.now();
         }
     }
     
     public boolean estaInactiva() {
-        return this.estadoCuenta == EstadoCuentaa.INACTIVA;
+        return this.estadoCuenta == EstadoCuenta.INACTIVA;
     }
 
     public void reactivarCuenta() {
-        this.estadoCuenta = EstadoCuentaa.ACTIVA;
+        this.estadoCuenta = EstadoCuenta.ACTIVA;
     }
 
     public void recargarSaldo(double monto) {
