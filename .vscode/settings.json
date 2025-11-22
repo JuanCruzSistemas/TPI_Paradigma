@@ -1,0 +1,6 @@
+{
+    "prolog.executablePath": "swipl",
+    "files.associations": {
+        "*.pl": "prolog"
+    }
+}
