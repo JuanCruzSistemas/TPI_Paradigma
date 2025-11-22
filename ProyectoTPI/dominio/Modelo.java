@@ -5,10 +5,8 @@ public class Modelo {
     private int año;
     private String descripcion;
     
-    public Modelo(String nombre, int año, String descripcion) {
+    public Modelo(String nombre) {
         this.nombre = nombre;
-        this.año = año;
-        this.descripcion = descripcion;
     }
     
     public void setNombre(String nombre) {
@@ -37,6 +35,6 @@ public class Modelo {
 
     @Override
     public String toString() {
-        return this.nombre + ";" + this.año + ";" + this.descripcion;
+        return this.nombre;
     }
 }

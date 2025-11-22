@@ -20,14 +20,7 @@ public class FileUsuario extends FileManager {
             String nombre = info[1];
             String apellido = info[2];
             String clave = info[3];
-            boolean esHash = true;
-            /*
-             * El esHash sirve para que, como se lee del archivo, se guarde directamente la clave del archivo,
-             * en vez de hacerle el hash (como sí se hace con el constructor normal de Usuario),
-             * ya que sino, a la clave del archivo (ya hasheada) se le haría otra vez el hash, y se buguearía todo.
-             */
-        
-            return new Usuario(legajo, nombre, apellido, clave, esHash);
+            return new Usuario(legajo, nombre, apellido, clave);
         };
         List<Usuario> usuarios = lineas.stream()
                                        .map(armarUsuario)

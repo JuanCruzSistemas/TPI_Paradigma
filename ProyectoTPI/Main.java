@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             GestorUsuario gestor = new GestorUsuario();
-            new Login(gestor); // le puse que le pase el gestor directamente
+            new Login(gestor);
         });
     }
 }

@@ -1,42 +1,57 @@
 package ProyectoTPI.datos;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import ProyectoTPI.dominio.Cuenta;
+import ProyectoTPI.dominio.EstadoCuenta;
+import ProyectoTPI.dominio.RolPersonaUTN;
+import ProyectoTPI.dominio.TipoDocumento;
 import ProyectoTPI.recursos.Rutas;
 
 public class FileCuenta extends FileManager {
-    /**
-     * aca agregaría el archivo de vehiculos, no estaría mal una clase FileVehiculo que así como las otras tenga su metodo leerVehiculos(),
-     * y otros métodos. Uno podría ser justamente buscarVehiculosDeCuenta(String patente), como el que menciono abajo.
-     */
-    // private FileVehiculo archivoVehiculos;
+    private FileManager archivoTipoDocumento;
+    
     public FileCuenta() {
         super(Rutas.RUTA_CUENTAS);
-        // this.archivoVehiculos = new FileVehiculo();
+        this.archivoTipoDocumento = new FileManager(Rutas.RUTA_TIPO_DOCUMENTO);
     }
 
     public List<Cuenta> leerCuentas() {
-        /*
-         * AGREGAR IMPLEMENTACION (similar a la de leerUsuarios() de FileUsuario)
-         * usaría mas metodos en vez de hacer solo 'atributo = info[indice]', porque no son solo string.
-         * Ejemplo: al leer la cuenta, denería saber el rol de la persona utn. Pero en el archivo cuenta, solo está el nombre del rol, y el rol
-         * no solo tiene nombre, tiene fechas y el descuento. Entonces, en vez de hacer
-         * RolPersonaUTN rol = info[indice] (que estaría mal porque me daria solo el nombre),
-         * hago RolPersonaUTN rol = buscarRolPor(info[indice]); y ese buscarRolPor(String nombreRol) busca en el archivo de roles registrados.
-         * Encuentra el que tenga el nombre que figura en info[indice] y crea el objeto Rol con los datos encontrados, y lo asigna.
-         * 
-         * Algo similar sucede con los vehículos, solo que podría ser List<Vehiculo> vehiculos = buscarVehiculosDeCuenta(legajo); Eso buscaría en
-         * el archivo de vehiculos registrados. Encuentra todos los que figuren con legajo igual al pasado, y los trae como List<Vehiculo>.
-         * Otra forma (más facil pero cambia la forma de registrar una cuenta) es que al momento de registrar la cuenta, se registre además una
-         * lista de las patentes de sus vehiculos. Entonces es más fácil buscar en el archivo de vehículos, y no se le pasa el legajo sino que se
-         * le pasa la patente al metodo buscarVehiculosDeCuenta(String patente). De esta forma nos evitamos la relacion bidireccional entre Vehiculo
-         * y Cuenta (si es que quieren, me da igual).
-         * 
-         * Lo otro hay métodos que lo hacen, como la fecha que creo que era algo como LocalDateTime.parse(y aca le paso la string de fecha) algo asi.
-         * 
-         * 
-         */
-        return List.of();
+        List<String> lineas = leerArchivo();
+        return lineas.stream().map(s -> armarCuenta(s)).collect(Collectors.toList());
+    }
+
+    public Cuenta armarCuenta(String linea) {
+        String[] info = linea.split(";");
+        String nombre = info[0];
+        String apellido = info[1];
+        String legajo = info[2];
+        TipoDocumento tipoDocumento = buscarTipoDocumento(info[3]);
+        String nroDocumento = info[4];
+        LocalDateTime fechaYHoraCreacion = LocalDateTime.parse(info[5]);
+        EstadoCuenta estadoCuenta = EstadoCuenta.valueOf(info[7]);
+        RolPersonaUTN rolPersonaUTN = new RolPersonaUTN(info[8]);
+        double saldo = Double.parseDouble(info[9]);
+
+        return new Cuenta(nombre, apellido, legajo, tipoDocumento, nroDocumento, fechaYHoraCreacion, estadoCuenta, rolPersonaUTN, saldo);
+    }
+
+    public TipoDocumento buscarTipoDocumento(String siglas) {
+        Function<String, TipoDocumento> armarTipoDocumento = s -> {
+            String[] info = s.split(";");
+            String sigla = info[0];
+            String descripcion = info[1];
+            return new TipoDocumento(sigla, descripcion);
+        };
+
+        TipoDocumento tipoDocumento = archivoTipoDocumento.leerArchivo().stream()
+                                                             .filter(s -> s.split(";")[0].equals(siglas))
+                                                             .map(armarTipoDocumento)
+                                                             .findFirst()
+                                                             .orElse(null);
+        return tipoDocumento;
     }
 }

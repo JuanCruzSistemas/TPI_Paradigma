@@ -8,18 +8,8 @@ public class RolPersonaUTN {
     private LocalDateTime fechaYHoraFinDescuento;
     private double valorDescuento;
     
-    public RolPersonaUTN(String nombreRol, double valorDescuento) {
+    public RolPersonaUTN(String nombreRol) {
         this.nombreRol = nombreRol;
-        this.fechaYHoraInicioDescuento = LocalDateTime.now();
-        this.valorDescuento = valorDescuento;
-    }
-
-    // Constructor para la lectura desde roles_utn.csv
-    public RolPersonaUTN(String nombreRol, LocalDateTime fechaYHoraInicio, LocalDateTime fechaYHoraFin, double valorDescuento) {
-        this.nombreRol = nombreRol;
-        this.fechaYHoraInicioDescuento = fechaYHoraInicio;
-        this.fechaYHoraFinDescuento = fechaYHoraFin;
-        this.valorDescuento = valorDescuento;
     }
     
     public void setNombreRol(String nombreRol) {
@@ -28,6 +18,11 @@ public class RolPersonaUTN {
 
     public String getNombreRol() {
         return this.nombreRol;
+    }
+
+    public void darDeAltaDescuento(double valorDescuento) {
+        this.valorDescuento = valorDescuento;
+        this.fechaYHoraInicioDescuento = LocalDateTime.now();
     }
 
     public void darDeBajaDescuento() {
@@ -43,8 +38,8 @@ public class RolPersonaUTN {
         return this.fechaYHoraFinDescuento;
     }
 
-    public double getDescuento() {
-        return this.valorDescuento;
+    public void setValorDescuento(double valorDescuento) {
+        this.valorDescuento = valorDescuento;
     }
 
     @Override

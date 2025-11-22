@@ -3,11 +3,11 @@ package ProyectoTPI.controladores;
 import ProyectoTPI.gestores.GestorUsuario;
 import ProyectoTPI.user.Usuario;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.function.Predicate;
 
 public class ControladorLogin {
-    // pongo un poco de código a ver si les parece, sino lo dejamos con los calculos directamente en Login.java. Onda esto es
-    // para seguir con la lógica Modelo-Vista-Controlador
     private GestorUsuario gestorUsuario;
 
     public ControladorLogin(GestorUsuario gestorUsuario) {
@@ -28,7 +28,19 @@ public class ControladorLogin {
         return usuario;
     }
 
-    public boolean esAdmin(Usuario usuario) {
-        return usuario.getLegajo().startsWith("A"); // Veamos con qué condición se define a un admin, esta es de ejemplo.
+    public static String generarHash(String entradaTexto) {
+        try {
+            MessageDigest calculadorHash = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = calculadorHash.digest(entradaTexto.getBytes());
+
+            StringBuilder resultadoHexadecimal = new StringBuilder();
+            for (byte b : bytes) {
+                resultadoHexadecimal.append(String.format("%02x", b));
+            }
+            return resultadoHexadecimal.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
