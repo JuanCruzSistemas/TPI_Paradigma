@@ -21,10 +21,7 @@ public class GestorUsuario {
 
     public void registrarUsuario(Usuario u) {
         this.usuarios.add(u);
-        /*
-         * Agregar lógica para, además, agregar el usuario 'u' al this.archivoUsuarios (que trabaja con usuarios.csv).
-         * Creo que FileManager tiene para agregar info al archivo pero no se estoy gaga
-         */
+        this.archivoUsuarios.agregarInformacion(true, u);
     }
 
     public List<Usuario> cargarUsuarios() {

@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class FileManager {
     private String rutaArchivo;
@@ -47,7 +49,9 @@ public class FileManager {
         if (!existe()) crearArchivo();
 
         try (PrintWriter salida = new PrintWriter(new FileWriter(archivo, append))) {
-            List.of(informacion).forEach(salida::println);
+            Stream.of(informacion).filter(s -> !leerArchivo().contains(s))
+                                  .forEach(salida::println);
+            //List.of(informacion).forEach(salida::println);
         } catch (IOException e) {
             MensajesArchivos.errorEscrituraArchivo();
         }

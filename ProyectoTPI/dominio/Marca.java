@@ -6,9 +6,8 @@ public class Marca {
     private String nombre;
     private List<Modelo> modelos;
     
-    public Marca(String nombre, List<Modelo> modelos) {
+    public Marca(String nombre) {
         this.nombre = nombre;
-        this.modelos = modelos;
     }
     
     public void setNombre(String nombre) {

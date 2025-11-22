@@ -1,1 +1,0 @@
-hola :- write('Hola desde Prolog!'), nl.

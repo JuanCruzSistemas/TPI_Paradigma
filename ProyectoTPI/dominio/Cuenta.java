@@ -3,13 +3,9 @@ package ProyectoTPI.dominio;
 import ProyectoTPI.recursos.MensajesDominio;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-public class Cuenta {
+public class Cuenta implements Recargable {
     private String nombre;
     private String apellido;
     private String legajo;
@@ -20,9 +16,8 @@ public class Cuenta {
     private EstadoCuenta estadoCuenta;
     private RolPersonaUTN rolPersonaUtn;
     private double saldo;
-    private List<Vehiculo> vehiculos;
 
-    public Cuenta(String nombre, String apellido, String legajo, TipoDocumento tipoDocumento, String nroDocumento, RolPersonaUTN rolPersonaUtn, EstadoCuenta estadoCuenta, double saldo) {
+    public Cuenta(String nombre, String apellido, String legajo, TipoDocumento tipoDocumento, String nroDocumento, RolPersonaUTN rolPersonaUtn) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.legajo = legajo;
@@ -30,24 +25,21 @@ public class Cuenta {
         this.estadoCuenta = EstadoCuenta.ACTIVA;
         this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
-        this.vehiculos = new ArrayList<>();
         this.rolPersonaUtn = rolPersonaUtn;
-        this.saldo = saldo;
+        this.saldo = 0;
     }
 
     // Constructor para la lectura desde cuentas.csv
-    public Cuenta(String nombre, String apellido, String legajo, TipoDocumento tipoDocumento, String nroDocumento, LocalDateTime fechaYHoraCreacion, LocalDateTime fechaYHoraBaja, EstadoCuenta estadoCuenta, RolPersonaUTN rolPersonaUtn, double saldo, List<Vehiculo> vehiculos) {
+    public Cuenta(String nombre, String apellido, String legajo, TipoDocumento tipoDocumento, String nroDocumento, LocalDateTime fechaYHoraCreacion, EstadoCuenta estadoCuenta, RolPersonaUTN rolPersonaUtn, double saldo) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.legajo = legajo;
         this.tipoDocumento = tipoDocumento;
         this.nroDocumento = nroDocumento;
         this.fechaYHoraCreacion = fechaYHoraCreacion;
-        this.fechaYHoraBaja = fechaYHoraBaja;
         this.estadoCuenta = estadoCuenta;
         this.rolPersonaUtn = rolPersonaUtn;
         this.saldo = saldo;
-        this.vehiculos = vehiculos;
     }
     
     public String getNombre() {
@@ -95,50 +87,6 @@ public class Cuenta {
         return this.saldo;
     }
 
-    public List<Vehiculo> getVehiculos() {
-        return this.vehiculos;
-    }
-    
-    public Vehiculo getVehiculo(String patente) {
-        if (!tieneVehiculos()) {
-            return null;
-        }
-        return buscarVehiculo(patente);
-    }
-
-    public boolean tieneVehiculos() {
-        if (this.vehiculos.isEmpty()) {
-            MensajesDominio.advertenciaNoPoseeVehiculos();
-            return false;
-        }
-        return true;
-    }
-
-    public Vehiculo buscarVehiculo(String patente) {
-        Predicate<Vehiculo> verificarPatente = v -> v.getPatente().equals(patente);
-        Vehiculo vehiculo = vehiculos.stream()
-                                     .filter(verificarPatente)
-                                     .findFirst()
-                                     .orElse(null);
-        return vehiculo;
-    }
-    
-    public List<String> getPatentesVehiculos() {
-        return this.vehiculos.stream()
-                             .map(v -> v.getPatente())
-                             .collect(Collectors.toList());
-    }
-    
-    public void agregarVehiculo(Vehiculo vehiculo) {
-        this.vehiculos.add(vehiculo);
-    }
-    
-    public void eliminarVehiculo(Vehiculo vehiculo) {
-        this.vehiculos.remove(vehiculo);
-        MensajesDominio.infoVehiculoEliminado();
-    }
-    
-    
     public boolean poseeFechaDeBaja() {
         return this.fechaYHoraBaja != null;
     }
@@ -171,7 +119,7 @@ public class Cuenta {
     @Override
     public String toString() {
         String representacion = String.format(
-            "%s;%s;%s;%s;%s;%s;%s;%s;%s;%.2f;%s",
+            "%s;%s;%s;%s;%s;%s;%s;%s;%s;%.2f",
             this.nombre,
             this.apellido,
             this.legajo,
@@ -181,9 +129,8 @@ public class Cuenta {
             this.fechaYHoraBaja,
             this.estadoCuenta,
             this.rolPersonaUtn.getNombreRol(),
-            this.saldo,
-            getPatentesVehiculos()
-        );
+            this.saldo
+        ).replace(",", ".");
         return representacion;
     }
 

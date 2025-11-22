@@ -13,6 +13,10 @@ public class Mensajes {
     public static void mensajeDatosIncorrectos() {
         mostrarError(DATOS_INCORRECTOS);
     }
+    
+    public static void mostrarExito(String mensaje) {
+        mostrarInfo(mensaje);
+    }
 
     public static void mostrarError(String mensaje) {
         mostrarMensaje(mensaje, JOptionPane.ERROR_MESSAGE);
@@ -30,7 +34,7 @@ public class Mensajes {
         JOptionPane.showMessageDialog(
             null,
             mensaje,
-            "ALERTA",
+            "",
             tipoMensaje
         );
     }
