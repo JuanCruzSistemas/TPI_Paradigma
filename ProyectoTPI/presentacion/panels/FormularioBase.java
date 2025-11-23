@@ -3,9 +3,20 @@ package ProyectoTPI.presentacion.panels;
 import ProyectoTPI.presentacion.ui.ColorScheme;
 import ProyectoTPI.presentacion.ui.ComponentFactory;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JComponent;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 public abstract class FormularioBase extends JPanel {
     protected JPanel camposPanel;

@@ -5,14 +5,20 @@ import ProyectoTPI.gestores.GestorCuenta;
 import ProyectoTPI.presentacion.ui.ColorScheme;
 import ProyectoTPI.presentacion.ui.ComponentFactory;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
+import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 
-/**
- * Panel para consultar y visualizar cuentas registradas.
- * Principio: Single Responsibility - Solo maneja la visualización de cuentas.
- */
+import java.util.List;
+
 public class PanelConsultaCuenta extends JPanel {
     private GestorCuenta gestorCuenta;
     
@@ -78,7 +84,7 @@ public class PanelConsultaCuenta extends JPanel {
     
     private Object[][] obtenerDatosCuentas() {
         FileManager archivoCuenta = gestorCuenta.getArchivoCuentas();
-        java.util.List<String> lineas = archivoCuenta.leerArchivo();
+        List<String> lineas = archivoCuenta.leerArchivo();
         
         return lineas.stream()
                      .map(s -> s.split(";"))

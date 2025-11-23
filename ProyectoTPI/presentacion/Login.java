@@ -1,83 +1,3 @@
-// package ProyectoTPI.presentacion;
-
-// import ProyectoTPI.controladores.ControladorLogin;
-// import ProyectoTPI.gestores.GestorUsuario;
-// import ProyectoTPI.recursos.Mensajes;
-// import ProyectoTPI.user.Usuario;
-
-// import javax.swing.JFrame;
-// import javax.swing.JLabel;
-// import javax.swing.JTextField;
-// import javax.swing.JPasswordField;
-// import javax.swing.JButton;
-
-// public class Login extends JFrame {
-//     private JTextField txtLegajo;
-//     private JPasswordField txtClave;
-//     private JButton btnIngresar;
-//     private ControladorLogin controladorLogin;
-
-//     public Login(GestorUsuario gestorUsuario) {
-//         this.controladorLogin = new ControladorLogin(gestorUsuario);
-
-//         setTitle("Login Usuario");
-//         setSize(400, 250);
-//         setDefaultCloseOperation(EXIT_ON_CLOSE);
-//         setLocationRelativeTo(null);
-//         setResizable(false);
-//         setLayout(null);
-
-//         inicializarComponentes();
-//         setVisible(true);
-//     }
-
-//     public void inicializarComponentes() {
-//         JLabel lblUsuario = new JLabel("Legajo:");
-//         lblUsuario.setBounds(40, 40, 80, 25);
-//         add(lblUsuario);
-
-//         txtLegajo = new JTextField();
-//         txtLegajo.setBounds(120, 40, 200, 25);
-//         add(txtLegajo);
-
-//         JLabel lblClave = new JLabel("Contraseña:");
-//         lblClave.setBounds(40, 80, 80, 25);
-//         add(lblClave);
-
-//         txtClave = new JPasswordField();
-//         txtClave.setBounds(120, 80, 200, 25);
-//         add(txtClave);
-
-//         btnIngresar = new JButton("Ingresar");
-//         btnIngresar.setBounds(120, 130, 100, 30);
-//         add(btnIngresar);
-
-//         btnIngresar.addActionListener(e -> validarLogin());
-//     }
-
-//     private void validarLogin() {
-//         String legajo = txtLegajo.getText().trim();
-//         String clave = new String(txtClave.getPassword());
-
-//         if (legajo.isEmpty() || clave.isEmpty()) {
-//             Mensajes.mensajeCompletarCampos();
-//             return;
-//         }
-
-//         Usuario usuario = this.controladorLogin.validarUsuario(legajo, clave);
-
-//         if (usuario == null) {
-//             Mensajes.mensajeDatosIncorrectos();
-//             return;
-//         }
-
-//         Mensajes.mostrarInfo("Bienvenido, " + usuario.getNombreCompleto());
-//         dispose();
-
-//         new Principal();
-//     }
-// }
-
 package ProyectoTPI.presentacion;
 
 import ProyectoTPI.controladores.ControladorLogin;
@@ -98,8 +18,6 @@ public class Login extends JFrame {
     private JPanel panelFondo;
     private Image imagenFondo;
     private Image logoUTN;
-    
-    // Para mover la ventana sin bordes
     private Point puntoInicial;
 
     public Login(GestorUsuario gestorUsuario) {
@@ -118,41 +36,7 @@ public class Login extends JFrame {
         agregarMovimientoVentana();
         setVisible(true);
     }
-
-    private void cargarImagenes() {
-        try {
-            // Cargar imagen de fondo (1800x958 o cualquier tamaño)
-            ImageIcon iconFondo = new ImageIcon("ProyectoTPI/recursos/imagenes/fondo_utn.jpg");
-            if (iconFondo.getIconWidth() > 0) {
-                imagenFondo = iconFondo.getImage();
-            }
-            
-            // Cargar logo
-            ImageIcon iconLogo = new ImageIcon("ProyectoTPI/recursos/imagenes/logo_utn_2.png");
-            if (iconLogo.getIconWidth() > 0) {
-                logoUTN = iconLogo.getImage();
-            }
-        } catch (Exception e) {
-            System.err.println("Error al cargar imágenes: " + e.getMessage());
-        }
-    }
-
-    private void agregarMovimientoVentana() {
-        // Permite arrastrar la ventana sin bordes
-        panelFondo.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                puntoInicial = e.getPoint();
-            }
-        });
-        panelFondo.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                int x = getLocation().x + e.getX() - puntoInicial.x;
-                int y = getLocation().y + e.getY() - puntoInicial.y;
-                setLocation(x, y);
-            }
-        });
-    }
-
+    
     public void inicializarComponentes() {
         // Panel principal con imagen de fondo escalada
         panelFondo = new JPanel() {
@@ -196,21 +80,55 @@ public class Login extends JFrame {
         };
         panelFondo.setLayout(null);
         setContentPane(panelFondo);
-
+        
         // Panel contenedor principal (tarjeta)
         JPanel panelContenedor = crearPanelContenedor();
         panelContenedor.setBounds(75, 100, 500, 600);
         panelFondo.add(panelContenedor);
-
+        
         // Botón cerrar
         JButton btnCerrar = crearBotonCerrar();
         btnCerrar.setBounds(595, 15, 40, 40);
         panelFondo.add(btnCerrar);
-
+        
         // Componentes del formulario
         agregarComponentesFormulario(panelContenedor);
     }
+    
+    private void cargarImagenes() {
+        try {
+            // Cargar imagen de fondo (1800x958 o cualquier tamaño)
+            ImageIcon iconFondo = new ImageIcon("ProyectoTPI/recursos/imagenes/fondo_utn.jpg");
+            if (iconFondo.getIconWidth() > 0) {
+                imagenFondo = iconFondo.getImage();
+            }
+            
+            // Cargar logo
+            ImageIcon iconLogo = new ImageIcon("ProyectoTPI/recursos/imagenes/logo_utn.png");
+            if (iconLogo.getIconWidth() > 0) {
+                logoUTN = iconLogo.getImage();
+            }
+        } catch (Exception e) {
+            System.err.println("Error al cargar imágenes: " + e.getMessage());
+        }
+    }
 
+    private void agregarMovimientoVentana() {
+        // Permite arrastrar la ventana sin bordes
+        panelFondo.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                puntoInicial = e.getPoint();
+            }
+        });
+        panelFondo.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                int x = getLocation().x + e.getX() - puntoInicial.x;
+                int y = getLocation().y + e.getY() - puntoInicial.y;
+                setLocation(x, y);
+            }
+        });
+    }
+    
     private JPanel crearPanelContenedor() {
         return new JPanel() {
             @Override
@@ -503,6 +421,6 @@ public class Login extends JFrame {
 
         Mensajes.mostrarInfo("Bienvenido, " + usuario.getNombreCompleto());
         dispose();
-        new Principal(this, this.controladorLogin.getGestorUsuario());
+        new Principal(this.controladorLogin.getGestorUsuario());
     }
 }

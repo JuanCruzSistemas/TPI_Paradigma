@@ -1,18 +1,17 @@
 package ProyectoTPI.presentacion.panels;
 
 import ProyectoTPI.gestores.GestorCuenta;
-import ProyectoTPI.recursos.Mensajes;
+import ProyectoTPI.recursos.MensajesDominio;
 import ProyectoTPI.presentacion.ui.ComponentFactory;
 import ProyectoTPI.datos.FileManager;
 import ProyectoTPI.recursos.Rutas;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import java.awt.Dimension;
 
-/**
- * Formulario para registrar vehículos.
- * Principio: Responsabilidad única - Solo maneja el registro de vehículos.
- */
+import java.util.List;
+import java.util.function.Function;
 
 public class FormularioVehiculoPanel extends FormularioBase {
     private GestorCuenta gestorCuenta;
@@ -45,44 +44,45 @@ public class FormularioVehiculoPanel extends FormularioBase {
     }
     
     @Override
-protected void onGuardar() {
-    if (txtModelo.getText().trim().isEmpty() ||
-        txtMarca.getText().trim().isEmpty() ||
-        txtPatente.getText().trim().isEmpty() ||
-        txtLegajoCuenta.getText().trim().isEmpty()) {
-        Mensajes.mostrarError("Por favor, complete todos los campos obligatorios.");
-        return;
+    protected void onGuardar() {
+        if (txtModelo.getText().trim().isEmpty() ||
+            txtMarca.getText().trim().isEmpty() ||
+            txtPatente.getText().trim().isEmpty() ||
+            txtLegajoCuenta.getText().trim().isEmpty()) {
+            MensajesDominio.mensajeCompletarCampos();
+            return;
+        }
+
+        String patente = txtPatente.getText().trim();
+        
+        // Validar que la patente no exista
+        if (existePatente(patente)) {
+            MensajesDominio.yaExisteVehiculoConPatente(patente);
+            return;
+        }
+
+        List<String> datosVehiculo = java.util.Arrays.asList(
+            txtModelo.getText().trim(),
+            txtMarca.getText().trim(),
+            patente,
+            (String) cmbColor.getSelectedItem(),
+            txtLegajoCuenta.getText().trim()
+        );
+
+        gestorCuenta.registrarVehiculo(datosVehiculo);
+        MensajesDominio.vehiculoRegistradoConExito();
+        onLimpiar();
     }
 
-    String patente = txtPatente.getText().trim();
-    
-    // Validar que la patente no exista
-    if (existePatente(patente)) {
-        Mensajes.mostrarError("Ya existe un vehículo con la patente: " + patente);
-        return;
+    private boolean existePatente(String patente) {
+        FileManager archivoVehiculos = new FileManager(Rutas.RUTA_VEHICULOS);
+        List<String> lineas = archivoVehiculos.leerArchivo();
+        Function<String, String[]> separarDatos = s -> s.split(";");
+        
+        return lineas.stream()
+                     .map(separarDatos)
+                     .anyMatch(campos -> campos[2].equalsIgnoreCase(patente));
     }
-
-    java.util.List<String> datosVehiculo = java.util.Arrays.asList(
-        txtModelo.getText().trim(),
-        txtMarca.getText().trim(),
-        patente,
-        (String) cmbColor.getSelectedItem(),
-        txtLegajoCuenta.getText().trim()
-    );
-
-    gestorCuenta.registrarVehiculo(datosVehiculo);
-    Mensajes.mostrarExito("Vehículo registrado exitosamente!");
-    onLimpiar();
-}
-
-private boolean existePatente(String patente) {
-    FileManager archivoVehiculos = new FileManager(Rutas.RUTA_VEHICULOS);
-    java.util.List<String> lineas = archivoVehiculos.leerArchivo();
-    
-    return lineas.stream()
-                 .map(s -> s.split(";"))
-                 .anyMatch(campos -> campos[2].equalsIgnoreCase(patente));
-}
     
     @Override
     protected void onLimpiar() {

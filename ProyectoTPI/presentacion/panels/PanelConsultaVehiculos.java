@@ -17,10 +17,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 
-/**
- * Panel para consultar y visualizar vehículos registrados.
- * Principio: Single Responsibility - Solo maneja la visualización de vehículos.
- */
 public class PanelConsultaVehiculos extends JPanel {
     private GestorCuenta gestorCuenta;
     
@@ -73,7 +69,6 @@ public class PanelConsultaVehiculos extends JPanel {
     }
     
     private JScrollPane crearTabla() {
-        // CAMBIA ESTAS COLUMNAS SEGÚN TUS NECESIDADES
         String[] columnas = {
             "Modelo", "Marca", "Patente", "Color", "Legajo cuenta"
         };
@@ -94,8 +89,6 @@ public class PanelConsultaVehiculos extends JPanel {
         FileManager archivoVehiculos = gestorCuenta.getArchivoVehiculos();
         java.util.List<String> lineas = archivoVehiculos.leerArchivo();
         
-        // AJUSTA ESTOS ÍNDICES SEGÚN LA ESTRUCTURA DE TU CSV
-        // Ejemplo: si tu CSV es: modelo;marca;patente;color;legajo
         return lineas.stream()
                      .map(s -> s.split(";"))
                      .map(campos -> new Object[]{
@@ -103,7 +96,7 @@ public class PanelConsultaVehiculos extends JPanel {
                          campos[1],  // Marca
                          campos[2],  // Patente
                          campos[3],  // Color
-                         campos[4]   // Legajo Propietario
+                         campos[4]   // Legajo
                      })
                      .toArray(Object[][]::new);
     }

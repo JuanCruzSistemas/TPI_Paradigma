@@ -18,17 +18,17 @@ public class GestorUsuario {
     public List<Usuario> getUsuarios() {
         return this.usuarios;
     }
-
-    public void registrarUsuario(Usuario u) {
-        this.usuarios.add(u);
-        this.archivoUsuarios.agregarInformacion(true, u);
-    }
-
+    
     public List<Usuario> cargarUsuarios() {
         List<Usuario> usuarios = archivoUsuarios.leerUsuarios();
         if (usuarios.isEmpty()) {
             MensajesArchivos.archivoVacio();
         }
         return usuarios;
+    }
+
+    public void registrarUsuario(Usuario usuario) {
+        this.usuarios.add(usuario);
+        this.archivoUsuarios.agregarInformacion(true, usuario);
     }
 }

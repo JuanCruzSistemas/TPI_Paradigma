@@ -3,13 +3,14 @@ package ProyectoTPI.presentacion.panels;
 import ProyectoTPI.presentacion.ui.ColorScheme;
 import ProyectoTPI.presentacion.ui.ComponentFactory;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import java.awt.GridBagLayout;
+import java.awt.Color;
+import java.awt.Component;
 
-/**
- 
-Panel de bienvenida inicial.
-Principio: Single Responsibility - Solo muestra el mensaje de bienvenida.*/
 public class PanelBienvenidaPanel extends JPanel {
 
     public PanelBienvenidaPanel() {

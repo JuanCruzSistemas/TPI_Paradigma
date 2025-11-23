@@ -1,15 +1,16 @@
 package ProyectoTPI.datos;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import ProyectoTPI.dominio.Cuenta;
 import ProyectoTPI.dominio.EstadoCuenta;
 import ProyectoTPI.dominio.RolPersonaUTN;
 import ProyectoTPI.dominio.TipoDocumento;
 import ProyectoTPI.recursos.Rutas;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FileCuenta extends FileManager {
     private FileManager archivoTipoDocumento;
@@ -21,7 +22,10 @@ public class FileCuenta extends FileManager {
 
     public List<Cuenta> leerCuentas() {
         List<String> lineas = leerArchivo();
-        return lineas.stream().map(s -> armarCuenta(s)).collect(Collectors.toList());
+        List<Cuenta> cuentas = lineas.stream()
+                                     .map(this::armarCuenta)
+                                     .collect(Collectors.toList());
+        return cuentas;
     }
 
     public Cuenta armarCuenta(String linea) {
@@ -36,19 +40,19 @@ public class FileCuenta extends FileManager {
         RolPersonaUTN rolPersonaUTN = new RolPersonaUTN(info[8]);
         double saldo = Double.parseDouble(info[9]);
 
-        return new Cuenta(nombre, apellido, legajo, tipoDocumento, nroDocumento, fechaYHoraCreacion, estadoCuenta, rolPersonaUTN, saldo);
+        return new Cuenta(nombre,apellido,legajo,tipoDocumento,nroDocumento,fechaYHoraCreacion, estadoCuenta,rolPersonaUTN,saldo);
     }
 
     public TipoDocumento buscarTipoDocumento(String siglas) {
+        Predicate<String> compararSiglas = s -> s.split(";")[0].equals(siglas);
         Function<String, TipoDocumento> armarTipoDocumento = s -> {
             String[] info = s.split(";");
             String sigla = info[0];
             String descripcion = info[1];
             return new TipoDocumento(sigla, descripcion);
         };
-
         TipoDocumento tipoDocumento = archivoTipoDocumento.leerArchivo().stream()
-                                                             .filter(s -> s.split(";")[0].equals(siglas))
+                                                             .filter(compararSiglas)
                                                              .map(armarTipoDocumento)
                                                              .findFirst()
                                                              .orElse(null);

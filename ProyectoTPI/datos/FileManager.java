@@ -12,8 +12,6 @@ import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class FileManager {
     private String rutaArchivo;
@@ -45,24 +43,22 @@ public class FileManager {
         }
     }
 
-    public void agregarInformacion(boolean append, Object... informacion) {
-        if (!existe()) crearArchivo();
-
-        try (PrintWriter salida = new PrintWriter(new FileWriter(archivo, append))) {
-            Stream.of(informacion).filter(s -> !leerArchivo().contains(s))
-                                  .forEach(salida::println);
-            //List.of(informacion).forEach(salida::println);
-        } catch (IOException e) {
-            MensajesArchivos.errorEscrituraArchivo();
-        }
-    }
-
     public void agregarInformacion(boolean append, List<?> informacion) {
         if (!existe()) crearArchivo();
 
         try (PrintWriter salida = new PrintWriter(new FileWriter(archivo, append))) {
             informacion.forEach(salida::println);
             
+        } catch (IOException e) {
+            MensajesArchivos.errorEscrituraArchivo();
+        }
+    }
+    
+    public void agregarInformacion(boolean append, Object... informacion) {
+        if (!existe()) crearArchivo();
+
+        try (PrintWriter salida = new PrintWriter(new FileWriter(archivo, append))) {
+            List.of(informacion).forEach(salida::println);
         } catch (IOException e) {
             MensajesArchivos.errorEscrituraArchivo();
         }
@@ -84,7 +80,7 @@ public class FileManager {
     }
 
     public boolean limpiarArchivo() {
-        int opcion = MensajesArchivos.mensajeConfirmacion("¿Desea borrar el contenido de \"" + getNombreArchivo() + "\"?");
+        int opcion = MensajesArchivos.mensajeConfirmacion("¿Desea borrar el contenido de \"" + getNombreArchivo() + "\"?", "Borrar archivo");
         if (opcion != JOptionPane.YES_OPTION) {
             return false;
         }
@@ -102,7 +98,7 @@ public class FileManager {
             return false;
         }
 
-        int opcion = MensajesArchivos.mensajeConfirmacion("¿Desea eliminar el archivo \"" + getNombreArchivo() + "\"?");
+        int opcion = MensajesArchivos.mensajeConfirmacion("¿Desea eliminar el archivo \"" + getNombreArchivo() + "\"?", "Eliminar archivo");
 
         if (opcion != JOptionPane.YES_OPTION) {
             return false;

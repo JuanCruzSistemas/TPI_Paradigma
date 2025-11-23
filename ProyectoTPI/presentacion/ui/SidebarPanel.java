@@ -2,11 +2,26 @@ package ProyectoTPI.presentacion.ui;
 
 import ProyectoTPI.gestores.GestorUsuario;
 import ProyectoTPI.presentacion.Login;
+import ProyectoTPI.recursos.Mensajes;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SidebarPanel extends JPanel {
     private JPanel[] botonesMenu = new JPanel[5];
@@ -77,7 +92,7 @@ public class SidebarPanel extends JPanel {
             {"+", "Registrar Cuenta"},
             {"+", "Registrar Vehiculo"},
             {"?", "Consultar Cuentas"},
-            {"?", "Consultar Vehiculos"}  // ← AGREGAR ESTA LÍNEA
+            {"?", "Consultar Vehiculos"}
         };
         String[] vistas = {"inicio", "formCuenta", "formVehiculo", "consulta", "consultaVehiculos"};
         
@@ -153,11 +168,9 @@ public class SidebarPanel extends JPanel {
         JPanel btnCerrar = crearBotonSidebar("X", "Cerrar Sesion");
         btnCerrar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(
-                    parentFrame,
+                int confirm = Mensajes.mensajeConfirmacion(
                     "¿Está seguro que desea cerrar sesión?",
-                    "Cerrar Sesión",
-                    JOptionPane.YES_NO_OPTION
+                    "Cerrar Sesión"
                 );
                 if (confirm == JOptionPane.YES_OPTION) {
                     parentFrame.dispose();

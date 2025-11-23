@@ -2,8 +2,8 @@ package ProyectoTPI.controladores;
 
 import ProyectoTPI.gestores.GestorUsuario;
 import ProyectoTPI.user.Usuario;
-import org.jpl7.Query;
 
+import org.jpl7.Query;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
 
@@ -37,8 +37,8 @@ public class ControladorLogin {
 
     public static String generarHash(String texto) {
         try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(texto.getBytes(StandardCharsets.UTF_8));
+            MessageDigest generadorHash = MessageDigest.getInstance("SHA-256");
+            byte[] hash = generadorHash.digest(texto.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 hexString.append(String.format("%02x", b));

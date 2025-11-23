@@ -8,16 +8,21 @@ import ProyectoTPI.presentacion.ui.ButtonFactory;
 import ProyectoTPI.presentacion.ui.ColorScheme;
 import ProyectoTPI.presentacion.ui.ComponentFactory;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/**
- * Formulario para registrar cuentas de usuarios.
- * Principio: Single Responsibility - Solo maneja el registro de cuentas.
- */
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+
 public class FormularioCuentaPanel extends FormularioBase {
     private GestorCuenta gestorCuenta;
     private JTextField txtLegajoBuscar;
@@ -61,7 +66,6 @@ public class FormularioCuentaPanel extends FormularioBase {
         agregarCampo("Rol UTN", txtRol);
         
         agregarSeparador();
-        
         configurarEventos();
     }
     
@@ -116,15 +120,13 @@ public class FormularioCuentaPanel extends FormularioBase {
             txtNroDoc.setText(datos[4]);
             txtRol.setText(datos[5]);
         } else {
-            Mensajes.mostrarError("No se encontró una persona con el legajo: " + legajo);
+            Mensajes.noExistePersonaConLegajo(legajo);
             limpiarCamposDatos();
         }
     }
     
     private String[] buscarPersonaEnCSV(String legajo) {
-        FileManager archivoPersonas = new FileManager(Rutas.RUTA_PERSONAS);
-        java.util.List<String> lineas = archivoPersonas.leerArchivo();
-        
+        List<String> lineas = this.gestorCuenta.getArchivoPersonas().leerArchivo();
         return lineas.stream()
                      .map(s -> s.split(";"))
                      .filter(s -> s[2].equals(legajo))
@@ -132,48 +134,48 @@ public class FormularioCuentaPanel extends FormularioBase {
                      .orElse(null);
     }
     
-@Override
-protected void onGuardar() {
-    if (txtNombre.getText().trim().isEmpty()) {
-        Mensajes.mostrarError("Primero busque un legajo válido.");
-        return;
+    @Override
+    protected void onGuardar() {
+        if (txtNombre.getText().trim().isEmpty()) {
+            Mensajes.buscarLegajoValido();
+            return;
+        }
+
+        String legajo = txtLegajoBuscar.getText().trim();
+        
+        if (existeLegajoCuenta(legajo)) {
+            Mensajes.yaExisteCuentaConLegajo(legajo);
+            return;
+        }
+
+        List<String> datosCuenta = Arrays.asList(
+            txtNombre.getText().trim(),
+            txtApellido.getText().trim(),
+            legajo,
+            txtTipoDoc.getText().trim(),
+            txtNroDoc.getText().trim(),
+            txtRol.getText().trim()
+        );
+
+        gestorCuenta.registrarCuenta(datosCuenta);
+        Mensajes.cuentaRegistradaConExito();
+
+        if (onCuentaRegistrada != null) {
+            onCuentaRegistrada.run();
+        }
+
+        onLimpiar();
     }
 
-    String legajo = txtLegajoBuscar.getText().trim();
-    
-    // Validar que el legajo no exista en cuentas
-    if (existeLegajoCuenta(legajo)) {
-        Mensajes.mostrarError("Ya existe una cuenta con el legajo: " + legajo);
-        return;
+    private boolean existeLegajoCuenta(String legajo) {
+        FileManager archivoCuentas = new FileManager(Rutas.RUTA_CUENTAS);
+        List<String> lineas = archivoCuentas.leerArchivo();
+        Function<String, String[]> separarDatos = s -> s.split(";");
+        
+        return lineas.stream()
+                     .map(separarDatos)
+                     .anyMatch(campos -> campos[2].equalsIgnoreCase(legajo));
     }
-
-    java.util.List<String> datosCuenta = java.util.Arrays.asList(
-        txtNombre.getText().trim(),
-        txtApellido.getText().trim(),
-        legajo,
-        txtTipoDoc.getText().trim(),
-        txtNroDoc.getText().trim(),
-        txtRol.getText().trim()
-    );
-
-    gestorCuenta.registrarCuenta(datosCuenta);
-    Mensajes.mostrarExito("Cuenta registrada exitosamente!");
-
-    if (onCuentaRegistrada != null) {
-        onCuentaRegistrada.run();
-    }
-
-    onLimpiar();
-}
-
-private boolean existeLegajoCuenta(String legajo) {
-    FileManager archivoCuentas = new FileManager(Rutas.RUTA_CUENTAS);
-    java.util.List<String> lineas = archivoCuentas.leerArchivo();
-    
-    return lineas.stream()
-                 .map(s -> s.split(";"))
-                 .anyMatch(campos -> campos[2].equalsIgnoreCase(legajo));
-}
     
     @Override
     protected void onLimpiar() {

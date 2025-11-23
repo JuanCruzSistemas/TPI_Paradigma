@@ -1,7 +1,13 @@
 package ProyectoTPI.presentacion.ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.LayoutManager;
+import java.awt.RenderingHints;
+
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 public class BackgroundPanel extends JPanel {
     private Image imagenFondo;

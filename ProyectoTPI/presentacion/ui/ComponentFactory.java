@@ -1,12 +1,20 @@
 package ProyectoTPI.presentacion.ui;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.BorderFactory;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 public class ComponentFactory {
+    private ComponentFactory() {}
     
     public static JTextField crearCampoTexto() {
         JTextField txt = new JTextField();
@@ -21,6 +29,7 @@ public class ComponentFactory {
         ));
         
         txt.addFocusListener(new FocusAdapter() {
+            
             public void focusGained(FocusEvent e) {
                 txt.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(ColorScheme.AMARILLO, 2),
@@ -90,6 +99,4 @@ public class ComponentFactory {
         tabla.setSelectionForeground(Color.WHITE);
         return tabla;
     }
-    
-    private ComponentFactory() {}
 }

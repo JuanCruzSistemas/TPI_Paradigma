@@ -130,19 +130,19 @@ public class Cuenta implements Recargable {
             this.estadoCuenta,
             this.rolPersonaUtn.getNombreRol(),
             this.saldo
-        ).replace(",", ".");
+        ).replace(",", "."); // Para replazar la coma decimal del saldo por punto: "0,00" -> "0.00"
         return representacion;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (!(o instanceof Cuenta)) {
+        if (!(obj instanceof Cuenta)) {
             return false;
         }
-        Cuenta cuenta = (Cuenta) o;
+        Cuenta cuenta = (Cuenta) obj;
         return Objects.equals(this.legajo, cuenta.legajo) && Objects.equals(this.nroDocumento, cuenta.nroDocumento);
     }
 
